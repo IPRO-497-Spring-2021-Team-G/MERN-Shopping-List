@@ -10,6 +10,14 @@ import PropTypes from 'prop-types';
 
 class ShoppingList extends Component {
 
+    // Action brought over from redux should be stored as a prop
+    static propTypes = {
+        getItems: PropTypes.func.isRequired,
+        // object that represents our state
+        item: PropTypes.object.isRequired,
+        isAuthenticated: PropTypes.bool
+    }
+
     // React lifecycle method that runs when a component is mounted
     // Example: API request, calling an action
     componentDidMount() {
@@ -64,7 +72,8 @@ class ShoppingList extends Component {
                             // Timeout set to 500 milliseconds
                             <CSSTransition key={_id} timeout={500} classNames="fade">
                                 <ListGroupItem>
-                                    <Button
+                                    {  (this.props.isAuthenticated) ? 
+                                    (<Button
                                     className="remove-btn"
                                     color="danger"
                                     size="sm"
@@ -78,6 +87,7 @@ class ShoppingList extends Component {
                                     >
                                         &times;
                                     </Button>
+                                    ) : (null) }
                                     {name}
                                 </ListGroupItem>
                             </CSSTransition>
@@ -89,17 +99,11 @@ class ShoppingList extends Component {
     }
 }
 
-// Action brought over from redux should be stored as a prop
-ShoppingList.propTypes = {
-    getItems: PropTypes.func.isRequired,
-    // object that represents our state
-    item: PropTypes.object.isRequired
-}
-
 // {} -- object
 // prop is being mapped from the state
 const mapStateToProps = (state) => ({
-    item: state.item
+    item: state.item,
+    isAuthenticated: state.auth.isAuthenticated
 });
 
 // mapStateToProps allows to take item state and turn it into a component property
